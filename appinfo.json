@@ -1,0 +1,17 @@
+{
+  "uuid": "4c405493-51d1-4511-bc84-ae975718f1e0",
+  "shortName": "Lego-Züge",
+  "longName": "Lego Züge steuern",
+  "companyName": "vs.uni-due.de",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
