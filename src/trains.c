@@ -21,7 +21,7 @@ static AppSync s_sync;
 static uint8_t s_sync_buffer[32];
 
 static char s_channel[] = "1";
-static char s_speed[] = "1";
+static char s_speed[] = "-1";
 
 static uint8_t mode = MODE_SPEED;
 
@@ -32,8 +32,8 @@ static void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, con
   static char buffer[64];
 
   // da kommen komisch Werte an. nicht beachten
-  //snprintf(buffer, sizeof(buffer), "%u -> %u", (uint)key, (uint)new_tuple->value->uint8);
-  //APP_LOG(APP_LOG_LEVEL_ERROR, buffer);
+  snprintf(buffer, sizeof(buffer), "%u -> %u", (uint)key, (uint)new_tuple->value->uint8);
+  APP_LOG(APP_LOG_LEVEL_ERROR, buffer);
   if (key == CHANNEL) {
     // channel
     snprintf(s_channel, sizeof(s_channel), "%u", (int)new_tuple->value->uint8);
@@ -144,7 +144,7 @@ static void init() {
   };
 
   // Begin using AppSync
-  app_sync_init(&s_sync, s_sync_buffer, sizeof(s_sync_buffer), initial_values, ARRAY_LENGTH(initial_values), sync_changed_handler, sync_error_handler, (void*) 4242);
+  app_sync_init(&s_sync, s_sync_buffer, sizeof(s_sync_buffer), initial_values, ARRAY_LENGTH(initial_values), sync_changed_handler, sync_error_handler, NULL);
 }
 
 static void deinit() {
