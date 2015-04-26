@@ -3,8 +3,8 @@
 #define CHANNEL 1
 #define SPEED 2
 
-#define MODE_CHANNEL 3;
-#define MODE_SPEED 4;
+#define MODE_CHANNEL 3
+#define MODE_SPEED 4
 
 // UI Elements
 static Window *s_main_window;
@@ -61,6 +61,18 @@ static void send_int(int key, int value) {
   app_message_outbox_send();
 }
 
+static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if (mode == MODE_SPEED) {
+    mode = MODE_CHANNEL;
+    text_layer_set_font(s_speed_label, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+    text_layer_set_font(s_channel_label, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  } else {
+    mode = MODE_SPEED;
+    text_layer_set_font(s_speed_label, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+    text_layer_set_font(s_channel_label, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  }
+}
+
 static void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_int(mode, -1);
 }
@@ -73,7 +85,7 @@ void config_provider(Window *window) {
  // single click / repeat-on-hold config:
   window_single_click_subscribe(BUTTON_ID_DOWN, down_single_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, up_single_click_handler);
-
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_single_click_handler);
   // long click config:
   //window_long_click_subscribe(BUTTON_ID_SELECT, 700, select_long_click_handler, select_long_click_release_handler);
 }
@@ -87,7 +99,7 @@ static void update_layer(Layer *layer, GContext *ctx) {
 static void init_text_layer(TextLayer *layer, Layer *parent) {
   text_layer_set_background_color(layer, GColorClear);
   text_layer_set_text_color(layer, GColorWhite);
-  text_layer_set_font(layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_font(layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   layer_add_child(parent, text_layer_get_layer(layer));
 }
 
@@ -112,6 +124,7 @@ static void main_window_load(Window *window) {
   s_speed_label = text_layer_create(GRect(10, 10, 90, 50));
   text_layer_set_text(s_speed_label, "Speed:");
   init_text_layer(s_speed_label, speed_layer);
+  text_layer_set_font(s_speed_label, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
 
   s_speed_layer = text_layer_create(GRect(90, 10, 24, 50));
   init_text_layer(s_speed_layer, speed_layer);
